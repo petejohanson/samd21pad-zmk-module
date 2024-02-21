@@ -1,0 +1,79 @@
+/*
+ * Copyright (c) 2023 Pete Johanson
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/dts-v1/;
+#include <atmel/samd21.dtsi>
+#include "samd21pad-pinctrl.dtsi"
+
+/ {
+	model = "LP Galaxy samd21pad";
+	compatible = "lpgalaxy,samd21pad";
+
+	chosen {
+		zephyr,sram = &sram0;
+		zephyr,flash = &flash0;
+		zephyr,console = &cdc_acm_uart;
+		zephyr,code-partition = &code_partition;
+		zmk,kscan = &kscan;
+	};
+	kscan: kscan {
+		compatible = "zmk,kscan-gpio-direct";
+		
+		input-gpios
+			= <&porta 15 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+			, <&porta 16 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+			, <&porta 17 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+			, <&porta 11 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+			, <&porta 19 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+			, <&porta 23 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+			, <&porta 14 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+			, <&porta 18 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+			, <&porta 22 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+			;
+	};
+
+};
+
+&cpu0 {
+	clock-frequency = <48000000>;
+};
+
+zephyr_udc0: &usb0 {
+        status = "okay";
+
+        pinctrl-0 = <&usb_dc_default>;
+        pinctrl-names = "default";
+
+	cdc_acm_uart: cdc_acm_uart {
+		compatible = "zephyr,cdc-acm-uart";
+	};
+};
+
+&flash0 {
+	partitions {
+		compatible = "fixed-partitions";
+		#address-cells = <1>;
+		#size-cells = <1>;
+
+		boot_partition: partition@0 {
+			reg = <0x00000000 DT_SIZE_K(8)>;
+			read-only;
+		};
+
+		code_partition: partition@2000 {
+			reg = <0x2000 DT_SIZE_K(256-8-16)>;
+			read-only;
+		};
+
+		/*
+		 * The final 16 KiB is reserved for the application.
+		 * Storage partition may be used by FCB or LittleFS.
+		 */
+		storage_partition: partition@3c000 {
+			reg = <0x0003c000 DT_SIZE_K(16)>;
+		};
+	};
+};

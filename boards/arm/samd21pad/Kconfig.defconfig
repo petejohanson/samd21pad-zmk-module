@@ -1,0 +1,10 @@
+# samd21pad board configuration 
+# Copyright (c) 2023 Pete Johanson
+# SPDX-License-Identifier: Apache-2.0
+
+config BOARD
+	default "samd21pad"
+	depends on BOARD_SAMD21PAD
+
+config ZMK_USB
+	default y if BOARD_SAMD21PAD

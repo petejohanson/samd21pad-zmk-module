@@ -1,0 +1,36 @@
+/*
+ * Copyright (c) 2020 The ZMK Contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+
+#define HYP(x) LC(LA(LS(LG(x))))
+
+/ {
+    keymap {
+        compatible = "zmk,keymap";
+	/*
+	SW1 -> 0,0
+	SW2 -> 0,1
+	SW3 -> 0,1 and 0,2
+	SW4 -> 0,3
+	SW5 -> 0,4 and 0,7 and 0,8
+	SW6 -> 0,4
+	SW7 -> 0,6
+	SW8 -> 0,7
+	SW9 -> 0,8
+	*/
+
+        default_layer {
+            bindings = <
+                &kp HYP(F1) &kp HYP(F2) &kp HYP(F3)
+                &kp HYP(F4) &kp HYP(F5) &kp HYP(F6)
+                &kp HYP(F7) &kp HYP(F8) &kp HYP(F9)
+            >;
+        };
+    };
+};
+
