@@ -6,3 +6,4 @@
 config BOARD_SAMD21PAD
 	bool "samd21pad board"
 	depends on SOC_PART_NUMBER_SAMD21E18A
+	select ZMK_KSCAN_DIRECT_POLLING
